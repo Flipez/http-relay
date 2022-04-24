@@ -56,6 +56,7 @@ void setup() {
   Serial.print("Setting relay outputs..");
   for (int i = 0; i < sizeof(relayOutputs) - 1; i++) {
     pinMode(relayOutputs[i], OUTPUT);
+    digitalWrite(relayOutputs[i], HIGH);
   }
   Serial.println("Done");
 
