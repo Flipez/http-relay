@@ -32,6 +32,7 @@ void setupRoutes() {
   server.on(F("/status"), HTTP_GET, getStatus);
   server.on(F("/set"), HTTP_GET, setRelay);
   server.on(F("/monoflop"), HTTP_GET, handleMonoflop);
+  server.on(F("/ping"), HTTP_GET, handlePing);
 }
 
 void handleNotFound() {
@@ -42,6 +43,10 @@ void monoflop(int id, unsigned long milliseconds) {
   digitalWrite(relayOutputs[id], LOW);
   delay(milliseconds);
   digitalWrite(relayOutputs[id], HIGH);
+}
+
+void handlePing() {
+  server.send(200, "text/plain", "pong");
 }
 
 void handleMonoflop() {
