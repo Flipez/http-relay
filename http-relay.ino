@@ -31,10 +31,28 @@ void getStatus() {
 void setupRoutes() {
   server.on(F("/status"), HTTP_GET, getStatus);
   server.on(F("/set"), HTTP_GET, setRelay);
+  server.on(F("/monoflop"), HTTP_GET, handleMonoflop);
 }
 
 void handleNotFound() {
   server.send(404, "text/plain", "");
+}
+
+void monoflop(int id, unsigned long milliseconds) {
+  digitalWrite(relayOutputs[id], LOW);
+  delay(milliseconds);
+  digitalWrite(relayOutputs[id], HIGH);
+}
+
+void handleMonoflop() {
+  if(server.hasArg("id") && server.hasArg("ms") && (server.arg("id") != "") && (server.arg("ms") != "")){
+    int relayId = server.arg("id").toInt();
+    int relayValue = server.arg("ms").toInt();
+    server.send(200, "text/plain", ""); 
+    monoflop(relayId, relayValue);
+  } else {
+    server.send(400, "text/plain", "");   
+  }
 }
 
 void setRelay() {
